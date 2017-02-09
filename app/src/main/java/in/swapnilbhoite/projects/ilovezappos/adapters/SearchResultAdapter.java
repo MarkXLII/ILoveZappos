@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.databinding.WidgetSearchResultBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
 
@@ -28,7 +29,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         WidgetSearchResultBinding binding = DataBindingUtil.inflate(
-                layoutInflater, viewType, parent, false);
+                layoutInflater, R.layout.widget_search_result, parent, false);
         return new ProductViewHolder(binding);
     }
 

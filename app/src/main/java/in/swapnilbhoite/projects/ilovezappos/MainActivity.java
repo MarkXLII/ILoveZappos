@@ -14,12 +14,15 @@ import android.view.MenuItem;
 
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.adapters.SearchResultAdapter;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkController;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkControllerImpl;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 
 public class MainActivity extends AppCompatActivity {
+
+    private RecyclerView recyclerViewSearchResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,14 +34,18 @@ public class MainActivity extends AppCompatActivity {
         NetworkResponse<List<Product>> networkResponseSearch = new NetworkResponse<List<Product>>() {
             @Override
             public void onSuccess(List<Product> response) {
-                for (Product product : response) {
-                    Log.d("SWAP", product.toString());
-                }
+                SearchResultAdapter searchResultAdapter =
+                        new SearchResultAdapter(response);
+                recyclerViewSearchResults.setHasFixedSize(true);
+                recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+                recyclerViewSearchResults.setAdapter(searchResultAdapter);
+                Log.d("SWAP", response.toString());
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-
+                Log.e("SWAP", throwable.getMessage());
+                throwable.printStackTrace();
             }
         };
         networkController.search("nike", networkResponseSearch);
@@ -54,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setUpRecyclerView() {
-        RecyclerView recyclerViewSearchResults =
+        recyclerViewSearchResults =
                 (RecyclerView) findViewById(R.id.recycler_view_search_results);
         recyclerViewSearchResults.setHasFixedSize(true);
         GridLayoutManager gridLayoutManager =
