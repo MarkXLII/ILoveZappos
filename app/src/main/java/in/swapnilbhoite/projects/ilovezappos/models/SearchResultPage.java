@@ -104,4 +104,17 @@ public class SearchResultPage {
         this.additionalProperties.put(name, value);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "SearchResultPage{" +
+                "originalTerm='" + originalTerm + '\'' +
+                ", currentResultCount='" + currentResultCount + '\'' +
+                ", totalResultCount='" + totalResultCount + '\'' +
+                ", term='" + term + '\'' +
+                ", results=" + results +
+                ", statusCode='" + statusCode + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }

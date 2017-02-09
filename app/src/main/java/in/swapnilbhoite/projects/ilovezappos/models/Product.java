@@ -159,4 +159,21 @@ public class Product {
         this.additionalProperties.put(name, value);
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "brandName='" + brandName + '\'' +
+                ", thumbnailImageUrl='" + thumbnailImageUrl + '\'' +
+                ", productId='" + productId + '\'' +
+                ", originalPrice='" + originalPrice + '\'' +
+                ", styleId='" + styleId + '\'' +
+                ", colorId='" + colorId + '\'' +
+                ", price='" + price + '\'' +
+                ", percentOff='" + percentOff + '\'' +
+                ", productUrl='" + productUrl + '\'' +
+                ", productName='" + productName + '\'' +
+                ", additionalProperties=" + additionalProperties +
+                '}';
+    }
 }
