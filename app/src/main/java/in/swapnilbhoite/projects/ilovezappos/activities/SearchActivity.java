@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.Cart;
 import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.adapters.OnResultClickedListener;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchItemDecoration;
@@ -35,6 +36,7 @@ public class SearchActivity extends AppCompatActivity
     private NetworkController networkController;
     private SearchView searchView;
     private View progressBar;
+    private TextView cartItemCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +78,13 @@ public class SearchActivity extends AppCompatActivity
 
         MenuItem cartItem = menu.findItem(R.id.action_my_cart);
         View cartView = MenuItemCompat.getActionView(cartItem);
-        TextView count = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
-        count.setText("5");
+        this.cartItemCount = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
+        if (Cart.getInstance().getCount() > 0) {
+            cartItemCount.setText(Cart.getInstance().getCount());
+            cartItemCount.setVisibility(View.VISIBLE);
+        } else {
+            cartItemCount.setVisibility(View.GONE);
+        }
         return true;
     }
 
