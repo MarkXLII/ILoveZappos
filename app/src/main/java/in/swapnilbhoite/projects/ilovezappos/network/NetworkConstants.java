@@ -6,4 +6,5 @@ interface NetworkConstants {
     String AUTH_KEY = "YOUR AUTH KEY HERE";
 
     String PATH_SEARCH = "Search/";
+    String PATH_PRODUCT = "Product/";
 }

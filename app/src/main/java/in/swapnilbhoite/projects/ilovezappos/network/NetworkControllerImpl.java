@@ -2,11 +2,15 @@ package in.swapnilbhoite.projects.ilovezappos.network;
 
 
 import android.support.annotation.NonNull;
+import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
 
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
+import in.swapnilbhoite.projects.ilovezappos.models.ProductDetail;
 import in.swapnilbhoite.projects.ilovezappos.models.SearchResultPage;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +47,31 @@ public class NetworkControllerImpl implements NetworkController {
             @Override
             public void onFailure(Call<SearchResultPage> call, Throwable t) {
                 NetworkResponse<List<Product>> listNetworkResponse = listenerWeakReference.get();
+                if (listNetworkResponse != null) {
+                    listNetworkResponse.onFailure(t);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void getProductDetails(@NotNull String productId, NetworkResponse<ProductDetail> listener) {
+        Call<ProductDetail> productDetails = networkService.getProductDetails(productId, NetworkConstants.AUTH_KEY);
+        Log.d("SWAP", productDetails.request().toString());
+        final WeakReference<NetworkResponse<ProductDetail>> listenerWeakReference =
+                new WeakReference<>(listener);
+        productDetails.enqueue(new Callback<ProductDetail>() {
+            @Override
+            public void onResponse(Call<ProductDetail> call, Response<ProductDetail> response) {
+                NetworkResponse<ProductDetail> listNetworkResponse = listenerWeakReference.get();
+                if (listNetworkResponse != null) {
+                    listNetworkResponse.onSuccess(response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ProductDetail> call, Throwable t) {
+                NetworkResponse<ProductDetail> listNetworkResponse = listenerWeakReference.get();
                 if (listNetworkResponse != null) {
                     listNetworkResponse.onFailure(t);
                 }
