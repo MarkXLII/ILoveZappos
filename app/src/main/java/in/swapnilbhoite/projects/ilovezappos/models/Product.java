@@ -15,6 +15,9 @@ public class Product {
     private String percentOff;
     private String productUrl;
     private String productName;
+    private String brandId;
+    private String defaultImageUrl;
+    private String defaultProductUrl;
     private Map<String, Object> additionalProperties = new HashMap<>();
 
     public String getBrandName() {
@@ -144,6 +147,45 @@ public class Product {
 
     public Product withProductName(String productName) {
         this.productName = productName;
+        return this;
+    }
+
+    public String getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+    }
+
+    public Product withBrandId(String brandId) {
+        this.brandId = brandId;
+        return this;
+    }
+
+    public String getDefaultImageUrl() {
+        return defaultImageUrl;
+    }
+
+    public void setDefaultImageUrl(String defaultImageUrl) {
+        this.defaultImageUrl = defaultImageUrl;
+    }
+
+    public Product withDefaultImageUrl(String defaultImageUrl) {
+        this.defaultImageUrl = defaultImageUrl;
+        return this;
+    }
+
+    public String getDefaultProductUrl() {
+        return defaultProductUrl;
+    }
+
+    public void setDefaultProductUrl(String defaultProductUrl) {
+        this.defaultProductUrl = defaultProductUrl;
+    }
+
+    public Product withDefaultProductUrl(String defaultImageUrl) {
+        this.defaultProductUrl = productUrl;
         return this;
     }
 
