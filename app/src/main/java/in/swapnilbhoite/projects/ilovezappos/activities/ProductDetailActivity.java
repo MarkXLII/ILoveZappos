@@ -87,8 +87,8 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setTitle(PRODUCT.getBrandName());
         }
-        myToolbar.setTitle(PRODUCT.getBrandName());
     }
 
     @Override
