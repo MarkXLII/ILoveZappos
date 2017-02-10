@@ -25,7 +25,7 @@ import in.swapnilbhoite.projects.ilovezappos.network.NetworkController;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkControllerImpl;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 
-public class ProductDetailActivity extends AppCompatActivity implements NetworkResponse<ProductDetail> {
+public class ProductDetailActivity extends AppCompatActivity implements NetworkResponse<ProductDetail>, View.OnClickListener {
 
     private static Product PRODUCT;
     private NetworkController networkController;
@@ -47,40 +47,12 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
 
     private void setUpFab() {
         this.fabAddToCart = (FloatingActionButton) findViewById(R.id.fab_add_to_cart);
-        fabAddToCart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Cart.getInstance().contains(PRODUCT)) {
-                    return;
-                }
-                Cart.getInstance().addItem(PRODUCT);
-                fabAddToCart.clearAnimation();
-                ObjectAnimator animator = ObjectAnimator.ofFloat(fabAddToCart, View.ROTATION, 0, 360);
-                animator.setDuration(500);
-                animator.addListener(new Animator.AnimatorListener() {
-                    @Override
-                    public void onAnimationStart(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        fabAddToCart.setImageResource(R.drawable.ic_remove_shopping_cart_white_24dp);
-                    }
-
-                    @Override
-                    public void onAnimationCancel(Animator animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animator animation) {
-
-                    }
-                });
-                animator.start();
-            }
-        });
+        if (Cart.getInstance().contains(PRODUCT)) {
+            fabAddToCart.setImageResource(R.drawable.ic_remove_shopping_cart_white_24dp);
+        } else {
+            fabAddToCart.setImageResource(R.drawable.ic_add_shopping_cart_white_24dp);
+        }
+        fabAddToCart.setOnClickListener(this);
     }
 
     private void setUpContentView() {
@@ -142,5 +114,48 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.fab_add_to_cart) {
+            final boolean added;
+            if (!Cart.getInstance().contains(PRODUCT)) {
+                Cart.getInstance().addItem(PRODUCT);
+                added = true;
+            } else {
+                Cart.getInstance().removeItem(PRODUCT);
+                added = false;
+            }
+            fabAddToCart.clearAnimation();
+            ObjectAnimator animator = ObjectAnimator.ofFloat(fabAddToCart, View.ROTATION, 0, 360);
+            animator.setDuration(500);
+            animator.addListener(new Animator.AnimatorListener() {
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (added) {
+                        fabAddToCart.setImageResource(R.drawable.ic_remove_shopping_cart_white_24dp);
+                    } else {
+                        fabAddToCart.setImageResource(R.drawable.ic_add_shopping_cart_white_24dp);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
+            animator.start();
+        }
     }
 }

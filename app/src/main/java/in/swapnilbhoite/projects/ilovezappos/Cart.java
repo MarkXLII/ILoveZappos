@@ -30,4 +30,8 @@ public class Cart {
     public int getCount() {
         return productList.size();
     }
+
+    public void removeItem(Product product) {
+        productList.remove(product);
+    }
 }

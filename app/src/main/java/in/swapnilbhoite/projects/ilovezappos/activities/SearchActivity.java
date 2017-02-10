@@ -43,6 +43,7 @@ public class SearchActivity extends AppCompatActivity
     private View progressBar;
     private TextView cartItemCount;
     private View cartView;
+    private SearchResultAdapter searchResultAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,9 @@ public class SearchActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         updateCartBadgeCount();
+        if (searchResultAdapter != null) {
+            searchResultAdapter.notifyDataSetChanged();
+        }
     }
 
     private void setUpToolbar() {
@@ -103,13 +107,13 @@ public class SearchActivity extends AppCompatActivity
         if (cartItemCount == null) {
             return;
         }
+        if (animate) {
+            searchView.clearAnimation();
+            ObjectAnimator animator = ObjectAnimator.ofFloat(cartView, View.ROTATION, 0, 360);
+            animator.setDuration(200);
+            animator.start();
+        }
         if (Cart.getInstance().getCount() > 0) {
-            if (animate) {
-                searchView.clearAnimation();
-                ObjectAnimator animator = ObjectAnimator.ofFloat(cartView, View.ROTATION, 0, 360);
-                animator.setDuration(200);
-                animator.start();
-            }
             cartItemCount.setText(String.valueOf(Cart.getInstance().getCount()));
             cartItemCount.setVisibility(View.VISIBLE);
         } else {
@@ -120,8 +124,7 @@ public class SearchActivity extends AppCompatActivity
     @Override
     public void onSuccess(List<Product> response) {
         progressBar.setVisibility(View.GONE);
-        SearchResultAdapter searchResultAdapter =
-                new SearchResultAdapter(response, this, this);
+        this.searchResultAdapter = new SearchResultAdapter(response, this, this);
         recyclerViewSearchResults.setAdapter(searchResultAdapter);
     }
 
@@ -181,9 +184,14 @@ public class SearchActivity extends AppCompatActivity
 
     @Override
     public void cartItemUpdated(boolean added, Product product) {
-        if (!Cart.getInstance().contains(product)) {
+        if (added) {
             Cart.getInstance().addItem(product);
-            updateCartBadgeCount(true);
+        } else {
+            Cart.getInstance().removeItem(product);
+        }
+        updateCartBadgeCount(true);
+        if (searchResultAdapter != null) {
+            searchResultAdapter.notifyDataSetChanged();
         }
     }
 }

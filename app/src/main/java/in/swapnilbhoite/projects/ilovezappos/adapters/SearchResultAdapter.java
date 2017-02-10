@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.Cart;
 import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.databinding.WidgetSearchResultBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
@@ -66,6 +68,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
         private final ImageView imageViewThumb;
         private final TextView textViewOriginalPrice;
         private final TextView textViewPercentOff;
+        private final ImageButton imageButtonAddToCart;
 
         ProductViewHolder(WidgetSearchResultBinding binding) {
             super(binding.getRoot());
@@ -74,6 +77,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                     .findViewById(R.id.image_view_thumb);
             this.textViewOriginalPrice = (TextView) binding.getRoot().findViewById(R.id.text_view_original_price);
             this.textViewPercentOff = (TextView) binding.getRoot().findViewById(R.id.text_view_percent_off);
+            this.imageButtonAddToCart = (ImageButton) binding.getRoot().findViewById(R.id.image_button_add_to_cart);
         }
 
         void bind(final Product product) {
@@ -101,11 +105,21 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                 String off = product.getPercentOff() + " OFF!";
                 textViewPercentOff.setText(off);
             }
-            binding.getRoot().findViewById(R.id.image_button_add_to_cart).setOnClickListener(new View.OnClickListener() {
+            if (Cart.getInstance().contains(product)) {
+                imageButtonAddToCart.setImageResource(R.drawable.ic_remove_shopping_cart_white_24dp);
+            } else {
+                imageButtonAddToCart.setImageResource(R.drawable.ic_add_shopping_cart_white_24dp);
+            }
+            imageButtonAddToCart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (addToCartListener != null) {
-                        addToCartListener.cartItemUpdated(true, product);
+                        if (!Cart.getInstance().contains(product)) {
+                            addToCartListener.cartItemUpdated(true, product);
+                        } else {
+                            addToCartListener.cartItemUpdated(false, product);
+                        }
+                        v.refreshDrawableState();
                     }
                 }
             });
