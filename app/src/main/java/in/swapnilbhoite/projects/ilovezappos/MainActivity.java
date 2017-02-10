@@ -21,10 +21,13 @@ import in.swapnilbhoite.projects.ilovezappos.network.NetworkController;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkControllerImpl;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NetworkResponse<List<Product>>,
+        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
 
     private RecyclerView recyclerViewSearchResults;
-    private NetworkResponse<List<Product>> networkResponseSearch;
+    private NetworkController networkController;
+    private SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,23 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setUpToolbar();
         setUpRecyclerView();
-        NetworkController networkController = new NetworkControllerImpl();
-        networkResponseSearch = new NetworkResponse<List<Product>>() {
-            @Override
-            public void onSuccess(List<Product> response) {
-                SearchResultAdapter searchResultAdapter =
-                        new SearchResultAdapter(response);
-                recyclerViewSearchResults.setAdapter(searchResultAdapter);
-                Log.d("SWAP", response.toString());
-            }
-
-            @Override
-            public void onFailure(Throwable throwable) {
-                Log.e("SWAP", throwable.getMessage());
-                throwable.printStackTrace();
-            }
-        };
-        networkController.search("nike", networkResponseSearch);
+        networkController = new NetworkControllerImpl();
     }
 
     private void setUpToolbar() {
@@ -73,24 +60,49 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-
-        MenuItemCompat.OnActionExpandListener expandListener =
-                new MenuItemCompat.OnActionExpandListener() {
-                    @Override
-                    public boolean onMenuItemActionCollapse(MenuItem item) {
-                        return true;
-                    }
-
-                    @Override
-                    public boolean onMenuItemActionExpand(MenuItem item) {
-                        return true;
-                    }
-                };
-
         MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        MenuItemCompat.setOnActionExpandListener(searchItem, expandListener);
-
+        searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        MenuItemCompat.setOnActionExpandListener(searchItem, this);
+        searchView.setOnQueryTextListener(this);
+        searchItem.expandActionView();
         return true;
+    }
+
+    @Override
+    public void onSuccess(List<Product> response) {
+        SearchResultAdapter searchResultAdapter =
+                new SearchResultAdapter(response);
+        recyclerViewSearchResults.setAdapter(searchResultAdapter);
+        Log.d("SWAP", response.toString());
+    }
+
+    @Override
+    public void onFailure(Throwable throwable) {
+        Log.e("SWAP", throwable.getMessage());
+        throwable.printStackTrace();
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        if (!query.isEmpty()) {
+            networkController.search(query, this);
+            searchView.clearFocus();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
