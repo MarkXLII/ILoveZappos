@@ -1,4 +1,4 @@
-package in.swapnilbhoite.projects.ilovezappos;
+package in.swapnilbhoite.projects.ilovezappos.activities;
 
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.databinding.ActivityProductDetailBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
 import in.swapnilbhoite.projects.ilovezappos.models.ProductDetail;

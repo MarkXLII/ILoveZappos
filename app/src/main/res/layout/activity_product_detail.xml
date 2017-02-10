@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="in.swapnilbhoite.projects.ilovezappos.ProductDetailActivity">
+        tools:context="in.swapnilbhoite.projects.ilovezappos.activities.ProductDetailActivity">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -33,7 +33,7 @@
             android:orientation="vertical"
             android:padding="16dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context="in.swapnilbhoite.projects.ilovezappos.ProductDetailActivity"
+            tools:context="in.swapnilbhoite.projects.ilovezappos.activities.ProductDetailActivity"
             tools:showIn="@layout/activity_product_detail">
 
             <ImageView

@@ -1,4 +1,4 @@
-package in.swapnilbhoite.projects.ilovezappos;
+package in.swapnilbhoite.projects.ilovezappos.activities;
 
 import android.content.Intent;
 import android.os.Build;
@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.adapters.OnResultClickedListener;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchItemDecoration;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchResultAdapter;
