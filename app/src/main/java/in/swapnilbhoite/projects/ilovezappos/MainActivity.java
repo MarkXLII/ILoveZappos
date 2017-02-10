@@ -8,9 +8,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.List;
 
@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView recyclerViewSearchResults;
     private NetworkController networkController;
     private SearchView searchView;
+    private View progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setUpRecyclerView() {
+        progressBar = findViewById(R.id.progress_bar);
         recyclerViewSearchResults =
                 (RecyclerView) findViewById(R.id.recycler_view_search_results);
         SearchItemDecoration itemDecoration =
@@ -70,15 +72,15 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSuccess(List<Product> response) {
+        progressBar.setVisibility(View.GONE);
         SearchResultAdapter searchResultAdapter =
                 new SearchResultAdapter(response);
         recyclerViewSearchResults.setAdapter(searchResultAdapter);
-        Log.d("SWAP", response.toString());
     }
 
     @Override
     public void onFailure(Throwable throwable) {
-        Log.e("SWAP", throwable.getMessage());
+        progressBar.setVisibility(View.GONE);
         throwable.printStackTrace();
     }
 
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity
         if (!query.isEmpty()) {
             networkController.search(query, this);
             searchView.clearFocus();
+            progressBar.setVisibility(View.VISIBLE);
         }
         return true;
     }
