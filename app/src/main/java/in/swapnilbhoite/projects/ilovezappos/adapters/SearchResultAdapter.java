@@ -1,11 +1,13 @@
 package in.swapnilbhoite.projects.ilovezappos.adapters;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -58,12 +60,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
 
         private final WidgetSearchResultBinding binding;
         private final ImageView imageViewThumb;
+        private final TextView textViewOriginalPrice;
+        private final TextView textViewPercentOff;
 
         ProductViewHolder(WidgetSearchResultBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
             this.imageViewThumb = (ImageView) binding.getRoot()
                     .findViewById(R.id.image_view_thumb);
+            this.textViewOriginalPrice = (TextView) binding.getRoot().findViewById(R.id.text_view_original_price);
+            this.textViewPercentOff = (TextView) binding.getRoot().findViewById(R.id.text_view_percent_off);
+
         }
 
         void bind(final Product product) {
@@ -80,6 +87,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+            if (product.getPercentOff().equals("0%")) {
+                textViewOriginalPrice.setVisibility(View.GONE);
+                textViewPercentOff.setVisibility(View.GONE);
+            } else {
+                textViewOriginalPrice
+                        .setPaintFlags(textViewOriginalPrice.getPaintFlags()
+                                | Paint.STRIKE_THRU_TEXT_FLAG);
+                textViewPercentOff.setVisibility(View.VISIBLE);
+                String off = product.getPercentOff() + " OFF!";
+                textViewPercentOff.setText(off);
+            }
         }
     }
 }

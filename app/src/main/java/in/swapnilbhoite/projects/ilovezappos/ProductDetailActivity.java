@@ -1,12 +1,15 @@
 package in.swapnilbhoite.projects.ilovezappos;
 
 import android.databinding.DataBindingUtil;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -45,6 +48,20 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
                 .load(PRODUCT.getThumbnailImageUrl())
                 .into(thumbnail);
         networkController.getProductDetails(PRODUCT.getProductId(), this);
+
+        TextView textViewOriginalPrice = (TextView) binding.getRoot().findViewById(R.id.text_view_original_price);
+        TextView textViewPercentOff = (TextView) binding.getRoot().findViewById(R.id.text_view_percent_off);
+        if (PRODUCT.getPercentOff().equals("0%")) {
+            textViewOriginalPrice.setVisibility(View.GONE);
+            textViewPercentOff.setVisibility(View.GONE);
+        } else {
+            textViewOriginalPrice
+                    .setPaintFlags(textViewOriginalPrice.getPaintFlags()
+                            | Paint.STRIKE_THRU_TEXT_FLAG);
+            textViewPercentOff.setVisibility(View.VISIBLE);
+            String off = PRODUCT.getPercentOff() + " OFF!";
+            textViewPercentOff.setText(off);
+        }
     }
 
     private void setUpToolbar() {
