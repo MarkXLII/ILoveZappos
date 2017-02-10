@@ -25,7 +25,7 @@ import in.swapnilbhoite.projects.ilovezappos.network.NetworkController;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkControllerImpl;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 
-public class MainActivity extends AppCompatActivity
+public class SearchActivity extends AppCompatActivity
         implements NetworkResponse<List<Product>>,
         MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener, OnResultClickedListener {
 
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
         setUpToolbar();
         setUpRecyclerView();
         networkController = new NetworkControllerImpl();
@@ -57,10 +57,10 @@ public class MainActivity extends AppCompatActivity
         recyclerViewSearchResults =
                 (RecyclerView) findViewById(R.id.recycler_view_search_results);
         SearchItemDecoration itemDecoration =
-                new SearchItemDecoration(MainActivity.this, R.dimen.item_offset);
+                new SearchItemDecoration(SearchActivity.this, R.dimen.item_offset);
         recyclerViewSearchResults.addItemDecoration(itemDecoration);
         recyclerViewSearchResults.setHasFixedSize(true);
-        recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
+        recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(SearchActivity.this, 2));
     }
 
     @Override
