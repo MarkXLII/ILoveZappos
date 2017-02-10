@@ -108,7 +108,7 @@ public class SearchActivity extends AppCompatActivity
             return;
         }
         if (animate) {
-            searchView.clearAnimation();
+            cartView.clearAnimation();
             ObjectAnimator animator = ObjectAnimator.ofFloat(cartView, View.ROTATION, 0, 360);
             animator.setDuration(200);
             animator.start();

@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
+
+    <item
+        android:id="@+id/action_my_cart"
+        android:title="@string/action_my_cart"
+        app:actionLayout="@layout/action_layout_cart"
+        app:showAsAction="always" />
+
+</menu>

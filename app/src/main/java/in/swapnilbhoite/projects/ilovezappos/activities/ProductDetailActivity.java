@@ -6,9 +6,11 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,6 +33,8 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     private NetworkController networkController;
     private ImageView thumbnail;
     private FloatingActionButton fabAddToCart;
+    private View cartView;
+    private TextView cartItemCount;
 
     public static void setProduct(Product product) {
         PRODUCT = product;
@@ -88,6 +92,38 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
         if (supportActionBar != null) {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.setTitle(PRODUCT.getBrandName());
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_product_details, menu);
+        MenuItem cartItem = menu.findItem(R.id.action_my_cart);
+        this.cartView = MenuItemCompat.getActionView(cartItem);
+        this.cartItemCount = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
+        updateCartBadgeCount();
+        return true;
+    }
+
+    private void updateCartBadgeCount() {
+        updateCartBadgeCount(false);
+    }
+
+    private void updateCartBadgeCount(boolean animate) {
+        if (cartItemCount == null) {
+            return;
+        }
+        if (animate) {
+            cartView.clearAnimation();
+            ObjectAnimator animator = ObjectAnimator.ofFloat(cartView, View.ROTATION, 0, 360);
+            animator.setDuration(200);
+            animator.start();
+        }
+        if (Cart.getInstance().getCount() > 0) {
+            cartItemCount.setText(String.valueOf(Cart.getInstance().getCount()));
+            cartItemCount.setVisibility(View.VISIBLE);
+        } else {
+            cartItemCount.setVisibility(View.GONE);
         }
     }
 
@@ -161,6 +197,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
                 }
             });
             animator.start();
+            updateCartBadgeCount(true);
         }
     }
 }
