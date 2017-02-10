@@ -56,7 +56,9 @@ public class NetworkControllerImpl implements NetworkController {
 
     @Override
     public void getProductDetails(@NotNull String productId, NetworkResponse<ProductDetail> listener) {
-        Call<ProductDetail> productDetails = networkService.getProductDetails(productId, NetworkConstants.AUTH_KEY);
+        Call<ProductDetail> productDetails = networkService.getProductDetails(productId,
+                NetworkConstants.AUTH_KEY,
+                "[\"styles\"]");
         Log.d("SWAP", productDetails.request().toString());
         final WeakReference<NetworkResponse<ProductDetail>> listenerWeakReference =
                 new WeakReference<>(listener);

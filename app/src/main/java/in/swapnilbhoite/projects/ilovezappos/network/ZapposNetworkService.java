@@ -14,5 +14,7 @@ interface ZapposNetworkService {
     Call<SearchResultPage> search(@Query("term") String term, @Query("key") String key);
 
     @GET(NetworkConstants.PATH_PRODUCT + "{productId}")
-    Call<ProductDetail> getProductDetails(@Path("productId") String productId, @Query("key") String key);
+    Call<ProductDetail> getProductDetails(@Path("productId") String productId,
+                                          @Query("key") String key,
+                                          @Query("includes") String includes);
 }

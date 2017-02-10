@@ -1,6 +1,7 @@
 package in.swapnilbhoite.projects.ilovezappos.models;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unused")
@@ -19,6 +20,7 @@ public class Product {
     private String brandId;
     private String defaultImageUrl;
     private String defaultProductUrl;
+    private List<Style> styles = null;
     private Map<String, Object> additionalProperties = new HashMap<>();
 
     public String getBrandName() {
@@ -200,6 +202,19 @@ public class Product {
 
     public Product withAdditionalProperty(String name, Object value) {
         this.additionalProperties.put(name, value);
+        return this;
+    }
+
+    public List<Style> getStyles() {
+        return styles;
+    }
+
+    public void setStyles(List<Style> styles) {
+        this.styles = styles;
+    }
+
+    public Product withStyles(List<Style> styles) {
+        this.styles = styles;
         return this;
     }
 
