@@ -1,5 +1,6 @@
 package in.swapnilbhoite.projects.ilovezappos.activities;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ public class SearchActivity extends AppCompatActivity
     private SearchView searchView;
     private View progressBar;
     private TextView cartItemCount;
+    private View cartView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,12 @@ public class SearchActivity extends AppCompatActivity
         setUpToolbar();
         setUpRecyclerView();
         networkController = new NetworkControllerImpl();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateCartBadgeCount();
     }
 
     private void setUpToolbar() {
@@ -81,14 +89,27 @@ public class SearchActivity extends AppCompatActivity
         searchItem.expandActionView();
 
         MenuItem cartItem = menu.findItem(R.id.action_my_cart);
-        View cartView = MenuItemCompat.getActionView(cartItem);
+        this.cartView = MenuItemCompat.getActionView(cartItem);
         this.cartItemCount = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
         updateCartBadgeCount();
         return true;
     }
 
     private void updateCartBadgeCount() {
+        updateCartBadgeCount(false);
+    }
+
+    private void updateCartBadgeCount(boolean animate) {
+        if (cartItemCount == null) {
+            return;
+        }
         if (Cart.getInstance().getCount() > 0) {
+            if (animate) {
+                searchView.clearAnimation();
+                ObjectAnimator animator = ObjectAnimator.ofFloat(cartView, View.ROTATION, 0, 360);
+                animator.setDuration(200);
+                animator.start();
+            }
             cartItemCount.setText(String.valueOf(Cart.getInstance().getCount()));
             cartItemCount.setVisibility(View.VISIBLE);
         } else {
@@ -162,7 +183,7 @@ public class SearchActivity extends AppCompatActivity
     public void cartItemUpdated(boolean added, Product product) {
         if (!Cart.getInstance().contains(product)) {
             Cart.getInstance().addItem(product);
-            updateCartBadgeCount();
+            updateCartBadgeCount(true);
         }
     }
 }

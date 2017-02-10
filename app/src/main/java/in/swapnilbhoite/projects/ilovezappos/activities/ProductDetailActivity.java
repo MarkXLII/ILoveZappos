@@ -1,8 +1,11 @@
 package in.swapnilbhoite.projects.ilovezappos.activities;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import in.swapnilbhoite.projects.ilovezappos.Cart;
 import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.databinding.ActivityProductDetailBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
@@ -26,6 +30,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     private static Product PRODUCT;
     private NetworkController networkController;
     private ImageView thumbnail;
+    private FloatingActionButton fabAddToCart;
 
     public static void setProduct(Product product) {
         PRODUCT = product;
@@ -37,6 +42,45 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
         networkController = new NetworkControllerImpl();
         setUpContentView();
         setUpToolbar();
+        setUpFab();
+    }
+
+    private void setUpFab() {
+        this.fabAddToCart = (FloatingActionButton) findViewById(R.id.fab_add_to_cart);
+        fabAddToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (Cart.getInstance().contains(PRODUCT)) {
+                    return;
+                }
+                Cart.getInstance().addItem(PRODUCT);
+                fabAddToCart.clearAnimation();
+                ObjectAnimator animator = ObjectAnimator.ofFloat(fabAddToCart, View.ROTATION, 0, 360);
+                animator.setDuration(500);
+                animator.addListener(new Animator.AnimatorListener() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        fabAddToCart.setImageResource(R.drawable.ic_remove_shopping_cart_white_24dp);
+                    }
+
+                    @Override
+                    public void onAnimationCancel(Animator animation) {
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animator animation) {
+
+                    }
+                });
+                animator.start();
+            }
+        });
     }
 
     private void setUpContentView() {
