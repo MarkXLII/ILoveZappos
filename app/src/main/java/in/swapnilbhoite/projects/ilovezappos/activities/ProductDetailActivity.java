@@ -128,7 +128,12 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
                 added = false;
             }
             fabAddToCart.clearAnimation();
-            ObjectAnimator animator = ObjectAnimator.ofFloat(fabAddToCart, View.ROTATION, 0, 360);
+            ObjectAnimator animator;
+            if (added) {
+                animator = ObjectAnimator.ofFloat(fabAddToCart, View.ROTATION, 0, 360);
+            } else {
+                animator = ObjectAnimator.ofFloat(fabAddToCart, View.ROTATION, 360, 0);
+            }
             animator.setDuration(500);
             animator.addListener(new Animator.AnimatorListener() {
                 @Override

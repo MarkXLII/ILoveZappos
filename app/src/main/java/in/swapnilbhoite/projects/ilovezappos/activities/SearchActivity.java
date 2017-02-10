@@ -163,8 +163,9 @@ public class SearchActivity extends AppCompatActivity
     public void resultClicked(Product product, View view) {
         ProductDetailActivity.setProduct(product);
         Intent intent = new Intent(this, ProductDetailActivity.class);
-        ActivityOptionsCompat options = ActivityOptionsCompat.
-                makeSceneTransitionAnimation(this, view, "image_view_thumb");
+        ActivityOptionsCompat options = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(this, view.findViewById(R.id.image_view_thumb),
+                        "image_view_thumb");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             startActivity(intent, options.toBundle());
         } else {
