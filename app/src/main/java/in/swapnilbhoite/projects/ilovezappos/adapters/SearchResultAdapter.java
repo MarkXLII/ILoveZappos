@@ -76,7 +76,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     if (resultClickedListener != null) {
-                        resultClickedListener.resultClicked(product);
+                        resultClickedListener.resultClicked(product, v);
                     }
                 }
             });

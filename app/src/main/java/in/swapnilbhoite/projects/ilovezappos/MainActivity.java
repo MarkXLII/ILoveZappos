@@ -1,7 +1,9 @@
 package in.swapnilbhoite.projects.ilovezappos;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -112,9 +114,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void resultClicked(Product product) {
+    public void resultClicked(Product product, View view) {
         ProductDetailActivity.setProduct(product);
         Intent intent = new Intent(this, ProductDetailActivity.class);
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(this, view, "image_view_thumb");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            startActivity(intent, options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 }
