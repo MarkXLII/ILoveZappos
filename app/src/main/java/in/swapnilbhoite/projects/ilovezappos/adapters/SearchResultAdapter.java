@@ -4,6 +4,9 @@ import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +54,19 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
     private static class ProductViewHolder extends RecyclerView.ViewHolder {
 
         private final WidgetSearchResultBinding binding;
+        private final ImageView imageViewThumb;
 
         ProductViewHolder(WidgetSearchResultBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+            this.imageViewThumb = (ImageView) binding.getRoot()
+                    .findViewById(R.id.image_view_thumb);
         }
 
         void bind(Product product) {
+            Picasso.with(imageViewThumb.getContext())
+                    .load(product.getThumbnailImageUrl())
+                    .into(imageViewThumb);
             binding.setProduct(product);
             binding.executePendingBindings();
         }
