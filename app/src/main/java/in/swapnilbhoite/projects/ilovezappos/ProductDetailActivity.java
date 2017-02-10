@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso;
 import in.swapnilbhoite.projects.ilovezappos.databinding.ActivityProductDetailBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
 
-public class ProductDetail extends AppCompatActivity {
+public class ProductDetailActivity extends AppCompatActivity {
 
     private static Product PRODUCT;
 

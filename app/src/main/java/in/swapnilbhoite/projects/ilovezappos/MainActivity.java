@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void resultClicked(Product product) {
-        ProductDetail.setProduct(product);
-        Intent intent = new Intent(this, ProductDetail.class);
+        ProductDetailActivity.setProduct(product);
+        Intent intent = new Intent(this, ProductDetailActivity.class);
         startActivity(intent);
     }
 }
