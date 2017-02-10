@@ -1,20 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="AlwaysShowAction">
 
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search_white_24dp"
         android:title="@string/action_search"
-        app:actionProviderClass="android.support.v7.widget.ShareActionProvider"
         app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always|collapseActionView"
-        tools:ignore="AlwaysShowAction" />
+        app:showAsAction="always|collapseActionView" />
 
     <item
         android:id="@+id/action_my_cart"
-        android:icon="@drawable/ic_shopping_cart_white_24dp"
         android:title="@string/action_my_cart"
+        app:actionLayout="@layout/action_layout_cart"
         app:showAsAction="always" />
 
 </menu>

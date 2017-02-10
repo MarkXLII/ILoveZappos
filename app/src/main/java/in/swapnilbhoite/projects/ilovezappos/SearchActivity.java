@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -71,6 +72,11 @@ public class SearchActivity extends AppCompatActivity
         MenuItemCompat.setOnActionExpandListener(searchItem, this);
         searchView.setOnQueryTextListener(this);
         searchItem.expandActionView();
+
+        MenuItem cartItem = menu.findItem(R.id.action_my_cart);
+        View cartView = MenuItemCompat.getActionView(cartItem);
+        TextView count = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
+        count.setText("5");
         return true;
     }
 
