@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -39,13 +38,6 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(List<Product> response) {
                 SearchResultAdapter searchResultAdapter =
                         new SearchResultAdapter(response);
-                int spacingInPixels = (int) TypedValue.
-                        applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
-                SearchItemDecoration itemDecoration =
-                        new SearchItemDecoration(MainActivity.this, R.dimen.item_offset);
-                recyclerViewSearchResults.addItemDecoration(itemDecoration);
-                recyclerViewSearchResults.setHasFixedSize(true);
-                recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                 recyclerViewSearchResults.setAdapter(searchResultAdapter);
                 Log.d("SWAP", response.toString());
             }
@@ -71,10 +63,11 @@ public class MainActivity extends AppCompatActivity {
     private void setUpRecyclerView() {
         recyclerViewSearchResults =
                 (RecyclerView) findViewById(R.id.recycler_view_search_results);
+        SearchItemDecoration itemDecoration =
+                new SearchItemDecoration(MainActivity.this, R.dimen.item_offset);
+        recyclerViewSearchResults.addItemDecoration(itemDecoration);
         recyclerViewSearchResults.setHasFixedSize(true);
-        GridLayoutManager gridLayoutManager =
-                new GridLayoutManager(this, 2, GridLayoutManager.HORIZONTAL, false);
-        recyclerViewSearchResults.setLayoutManager(gridLayoutManager);
+        recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
     }
 
     @Override
