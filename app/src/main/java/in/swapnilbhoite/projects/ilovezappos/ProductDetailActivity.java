@@ -63,9 +63,6 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
             PRODUCT.setBrandId(product.getBrandId());
             PRODUCT.setDefaultImageUrl(product.getDefaultImageUrl());
             PRODUCT.setDefaultProductUrl(product.getDefaultProductUrl());
-            Picasso.with(this)
-                    .load(PRODUCT.getDefaultImageUrl())
-                    .into(thumbnail);
         }
     }
 
