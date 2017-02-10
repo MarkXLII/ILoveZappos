@@ -9,11 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.adapters.SearchItemDecoration;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchResultAdapter;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkController;
@@ -23,6 +25,7 @@ import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerViewSearchResults;
+    private NetworkResponse<List<Product>> networkResponseSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +34,16 @@ public class MainActivity extends AppCompatActivity {
         setUpToolbar();
         setUpRecyclerView();
         NetworkController networkController = new NetworkControllerImpl();
-        NetworkResponse<List<Product>> networkResponseSearch = new NetworkResponse<List<Product>>() {
+        networkResponseSearch = new NetworkResponse<List<Product>>() {
             @Override
             public void onSuccess(List<Product> response) {
                 SearchResultAdapter searchResultAdapter =
                         new SearchResultAdapter(response);
+                int spacingInPixels = (int) TypedValue.
+                        applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, getResources().getDisplayMetrics());
+                SearchItemDecoration itemDecoration =
+                        new SearchItemDecoration(MainActivity.this, R.dimen.item_offset);
+                recyclerViewSearchResults.addItemDecoration(itemDecoration);
                 recyclerViewSearchResults.setHasFixedSize(true);
                 recyclerViewSearchResults.setLayoutManager(new GridLayoutManager(MainActivity.this, 2));
                 recyclerViewSearchResults.setAdapter(searchResultAdapter);
