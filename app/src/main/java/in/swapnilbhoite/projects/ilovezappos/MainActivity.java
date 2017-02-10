@@ -1,5 +1,6 @@
 package in.swapnilbhoite.projects.ilovezappos;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
@@ -14,6 +15,7 @@ import android.view.View;
 
 import java.util.List;
 
+import in.swapnilbhoite.projects.ilovezappos.adapters.OnResultClickedListener;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchItemDecoration;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchResultAdapter;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
@@ -23,7 +25,7 @@ import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 
 public class MainActivity extends AppCompatActivity
         implements NetworkResponse<List<Product>>,
-        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener {
+        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener, OnResultClickedListener {
 
     private RecyclerView recyclerViewSearchResults;
     private NetworkController networkController;
@@ -74,7 +76,7 @@ public class MainActivity extends AppCompatActivity
     public void onSuccess(List<Product> response) {
         progressBar.setVisibility(View.GONE);
         SearchResultAdapter searchResultAdapter =
-                new SearchResultAdapter(response);
+                new SearchResultAdapter(response, this);
         recyclerViewSearchResults.setAdapter(searchResultAdapter);
     }
 
@@ -107,5 +109,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    @Override
+    public void resultClicked(Product product) {
+        ProductDetail.setProduct(product);
+        Intent intent = new Intent(this, ProductDetail.class);
+        startActivity(intent);
     }
 }

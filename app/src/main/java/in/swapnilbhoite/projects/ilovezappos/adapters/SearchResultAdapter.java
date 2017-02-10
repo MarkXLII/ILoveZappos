@@ -3,6 +3,7 @@ package in.swapnilbhoite.projects.ilovezappos.adapters;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -18,14 +19,16 @@ import in.swapnilbhoite.projects.ilovezappos.models.Product;
 public class SearchResultAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_HOLDER_TYPE_SEARCH_RESULT = 0;
+    private static OnResultClickedListener resultClickedListener;
     private final List<Product> productList;
 
-    public SearchResultAdapter(List<Product> productList) {
+    public SearchResultAdapter(List<Product> productList, OnResultClickedListener resultClickedListener) {
         if (productList != null) {
             this.productList = new ArrayList<>(productList);
         } else {
             this.productList = new ArrayList<>();
         }
+        this.resultClickedListener = resultClickedListener;
     }
 
     @Override
@@ -63,12 +66,20 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                     .findViewById(R.id.image_view_thumb);
         }
 
-        void bind(Product product) {
+        void bind(final Product product) {
             Picasso.with(imageViewThumb.getContext())
                     .load(product.getThumbnailImageUrl())
                     .into(imageViewThumb);
             binding.setProduct(product);
             binding.executePendingBindings();
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (resultClickedListener != null) {
+                        resultClickedListener.resultClicked(product);
+                    }
+                }
+            });
         }
     }
 }

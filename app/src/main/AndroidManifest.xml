@@ -17,6 +17,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ProductDetail"
+            android:label="@string/title_activity_product_detail"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="in.swapnilbhoite.projects.ilovezappos.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
