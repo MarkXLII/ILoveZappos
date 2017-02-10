@@ -11,7 +11,7 @@ public class SearchItemDecoration extends RecyclerView.ItemDecoration {
 
     private int itemOffset;
 
-    public SearchItemDecoration(int itemOffset) {
+    private SearchItemDecoration(int itemOffset) {
         this.itemOffset = itemOffset;
     }
 

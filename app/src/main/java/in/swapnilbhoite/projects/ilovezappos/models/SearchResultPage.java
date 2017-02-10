@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class SearchResultPage {
 
     private String originalTerm;
@@ -12,7 +13,7 @@ public class SearchResultPage {
     private String term;
     private List<Product> results = null;
     private String statusCode;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     public String getOriginalTerm() {
         return originalTerm;

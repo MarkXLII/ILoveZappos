@@ -31,7 +31,6 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
 
     private static Product PRODUCT;
     private NetworkController networkController;
-    private ImageView thumbnail;
     private FloatingActionButton fabAddToCart;
     private View cartView;
     private TextView cartItemCount;
@@ -64,7 +63,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
                 .setContentView(this, R.layout.activity_product_detail);
         binding.setProduct(PRODUCT);
         binding.executePendingBindings();
-        this.thumbnail = (ImageView) findViewById(R.id.image_view_thumb);
+        ImageView thumbnail = (ImageView) findViewById(R.id.image_view_thumb);
         Picasso.with(this)
                 .load(PRODUCT.getThumbnailImageUrl())
                 .into(thumbnail);

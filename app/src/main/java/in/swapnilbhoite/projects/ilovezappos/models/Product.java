@@ -3,6 +3,7 @@ package in.swapnilbhoite.projects.ilovezappos.models;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class Product {
 
     private String brandName;
@@ -202,6 +203,7 @@ public class Product {
         return this;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
