@@ -209,12 +209,15 @@ public class Product {
 
         Product product = (Product) o;
 
-        return productId.equals(product.productId);
+        if (!productId.equals(product.productId)) return false;
+        return styleId.equals(product.styleId);
     }
 
     @Override
     public int hashCode() {
-        return productId.hashCode();
+        int result = productId.hashCode();
+        result = 31 * result + styleId.hashCode();
+        return result;
     }
 
     @Override
