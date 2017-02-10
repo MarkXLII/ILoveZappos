@@ -20,6 +20,7 @@ import java.util.List;
 
 import in.swapnilbhoite.projects.ilovezappos.Cart;
 import in.swapnilbhoite.projects.ilovezappos.R;
+import in.swapnilbhoite.projects.ilovezappos.adapters.AddToCartListener;
 import in.swapnilbhoite.projects.ilovezappos.adapters.OnResultClickedListener;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchItemDecoration;
 import in.swapnilbhoite.projects.ilovezappos.adapters.SearchResultAdapter;
@@ -30,7 +31,10 @@ import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
 
 public class SearchActivity extends AppCompatActivity
         implements NetworkResponse<List<Product>>,
-        MenuItemCompat.OnActionExpandListener, SearchView.OnQueryTextListener, OnResultClickedListener {
+        MenuItemCompat.OnActionExpandListener,
+        SearchView.OnQueryTextListener,
+        OnResultClickedListener,
+        AddToCartListener {
 
     private RecyclerView recyclerViewSearchResults;
     private NetworkController networkController;
@@ -79,20 +83,24 @@ public class SearchActivity extends AppCompatActivity
         MenuItem cartItem = menu.findItem(R.id.action_my_cart);
         View cartView = MenuItemCompat.getActionView(cartItem);
         this.cartItemCount = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
+        updateCartBadgeCount();
+        return true;
+    }
+
+    private void updateCartBadgeCount() {
         if (Cart.getInstance().getCount() > 0) {
-            cartItemCount.setText(Cart.getInstance().getCount());
+            cartItemCount.setText(String.valueOf(Cart.getInstance().getCount()));
             cartItemCount.setVisibility(View.VISIBLE);
         } else {
             cartItemCount.setVisibility(View.GONE);
         }
-        return true;
     }
 
     @Override
     public void onSuccess(List<Product> response) {
         progressBar.setVisibility(View.GONE);
         SearchResultAdapter searchResultAdapter =
-                new SearchResultAdapter(response, this);
+                new SearchResultAdapter(response, this, this);
         recyclerViewSearchResults.setAdapter(searchResultAdapter);
     }
 
@@ -148,5 +156,13 @@ public class SearchActivity extends AppCompatActivity
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void cartItemUpdated(boolean added, Product product) {
+        if (!Cart.getInstance().contains(product)) {
+            Cart.getInstance().addItem(product);
+            updateCartBadgeCount();
+        }
     }
 }

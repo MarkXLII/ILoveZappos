@@ -21,16 +21,20 @@ import in.swapnilbhoite.projects.ilovezappos.models.Product;
 public class SearchResultAdapter extends RecyclerView.Adapter {
 
     private static final int VIEW_HOLDER_TYPE_SEARCH_RESULT = 0;
+    private static AddToCartListener addToCartListener;
     private static OnResultClickedListener resultClickedListener;
     private final List<Product> productList;
 
-    public SearchResultAdapter(List<Product> productList, OnResultClickedListener resultClickedListener) {
+    public SearchResultAdapter(List<Product> productList,
+                               OnResultClickedListener resultClickedListener,
+                               AddToCartListener addToCartListener) {
         if (productList != null) {
             this.productList = new ArrayList<>(productList);
         } else {
             this.productList = new ArrayList<>();
         }
-        this.resultClickedListener = resultClickedListener;
+        SearchResultAdapter.resultClickedListener = resultClickedListener;
+        SearchResultAdapter.addToCartListener = addToCartListener;
     }
 
     @Override
@@ -70,7 +74,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                     .findViewById(R.id.image_view_thumb);
             this.textViewOriginalPrice = (TextView) binding.getRoot().findViewById(R.id.text_view_original_price);
             this.textViewPercentOff = (TextView) binding.getRoot().findViewById(R.id.text_view_percent_off);
-
         }
 
         void bind(final Product product) {
@@ -98,6 +101,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                 String off = product.getPercentOff() + " OFF!";
                 textViewPercentOff.setText(off);
             }
+            binding.getRoot().findViewById(R.id.image_button_add_to_cart).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (addToCartListener != null) {
+                        addToCartListener.cartItemUpdated(true, product);
+                    }
+                }
+            });
         }
     }
 }
