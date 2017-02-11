@@ -1,8 +1,13 @@
 package in.swapnilbhoite.projects.ilovezappos.models;
 
+import android.annotation.TargetApi;
+import android.os.Build;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import in.swapnilbhoite.projects.ilovezappos.utils.TextUtil;
 
 @SuppressWarnings("unused")
 public class Product {
@@ -23,8 +28,9 @@ public class Product {
     private List<Style> styles = null;
     private Map<String, Object> additionalProperties = new HashMap<>();
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public String getBrandName() {
-        return brandName;
+        return TextUtil.decodeUnicodes(brandName);
     }
 
     public void setBrandName(String brandName) {
@@ -141,7 +147,7 @@ public class Product {
     }
 
     public String getProductName() {
-        return productName;
+        return TextUtil.decodeUnicodes(productName);
     }
 
     public void setProductName(String productName) {
