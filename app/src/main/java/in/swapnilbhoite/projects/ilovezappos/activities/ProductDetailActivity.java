@@ -40,7 +40,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     private View cartView;
     private TextView cartItemCount;
     private ImageView thumbnail;
-    private boolean fromDeeplink;
+    private boolean fromDeepLink;
     private ActivityProductDetailBinding binding;
 
     public static void setProduct(Product product) {
@@ -68,9 +68,9 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
             PRODUCT.setColorId(pathSegments.get(3));
             PRODUCT.setStyleId(data.getQueryParameter("styleId"));
             networkController.getProductDetails(PRODUCT.getProductId(), this);
-            fromDeeplink = true;
+            fromDeepLink = true;
         } else {
-            fromDeeplink = false;
+            fromDeepLink = false;
         }
 
         setUpContentView();
@@ -176,7 +176,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     public void onSuccess(ProductDetail response) {
         if (response != null && response.getProduct() != null && !response.getProduct().isEmpty()) {
             Product product = response.getProduct().get(0);
-            if (fromDeeplink) {
+            if (fromDeepLink) {
                 product.setColorId(PRODUCT.getColorId());
                 product.setStyleId(PRODUCT.getStyleId());
                 for (Style style : product.getStyles()) {
