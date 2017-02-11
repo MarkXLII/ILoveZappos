@@ -5,4 +5,8 @@
     <string name="add_to_cart">Add to cart</string>
     <string name="item_thumbnail">Item thumbnail</string>
     <string name="title_activity_product_detail">ProductDetail</string>
+    <string name="share">Share</string>
+    <string name="share_message">Hey! Check out this cool stuff I just saw on Zappos. Looks chic! Doesn\'t it?\n</string>
+    <string name="share_subject">I Love Zappos!</string>
+    <string name="share_via">Share via</string>
 </resources>

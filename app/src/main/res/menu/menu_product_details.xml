@@ -4,9 +4,15 @@
     tools:ignore="AlwaysShowAction">
 
     <item
+        android:id="@+id/action_share"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="@drawable/ic_share_white_24dp"
+        android:title="@string/share"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_my_cart"
         android:title="@string/action_my_cart"
         app:actionLayout="@layout/action_layout_cart"
         app:showAsAction="always" />
-
 </menu>

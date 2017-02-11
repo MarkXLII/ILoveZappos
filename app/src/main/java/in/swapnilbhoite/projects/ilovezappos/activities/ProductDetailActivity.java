@@ -132,6 +132,21 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
         this.cartView = MenuItemCompat.getActionView(cartItem);
         this.cartItemCount = (TextView) cartView.findViewById(R.id.text_view_cart_item_count);
         updateCartBadgeCount();
+
+        MenuItem shareItem = menu.findItem(R.id.action_share);
+        shareItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                String url = PRODUCT.getProductUrl() + "?styleId=" + PRODUCT.getStyleId();
+                String message = getString(R.string.share_message);
+                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, message + url);
+                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
+                return false;
+            }
+        });
         return true;
     }
 
