@@ -19,14 +19,22 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkControllerImpl implements NetworkController {
 
+    private static NetworkControllerImpl networkController;
     private final ZapposNetworkService networkService;
 
-    public NetworkControllerImpl() {
+    private NetworkControllerImpl() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(NetworkConstants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         this.networkService = retrofit.create(ZapposNetworkService.class);
+    }
+
+    public static synchronized NetworkController getInstance() {
+        if (networkController == null) {
+            networkController = new NetworkControllerImpl();
+        }
+        return networkController;
     }
 
     @Override

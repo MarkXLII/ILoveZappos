@@ -51,7 +51,7 @@ public class SearchActivity extends AppCompatActivity
         setContentView(R.layout.activity_search);
         setUpToolbar();
         setUpRecyclerView();
-        networkController = new NetworkControllerImpl();
+        networkController = NetworkControllerImpl.getInstance();
     }
 
     @Override

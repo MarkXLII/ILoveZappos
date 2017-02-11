@@ -50,7 +50,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        networkController = new NetworkControllerImpl();
+        networkController = NetworkControllerImpl.getInstance();
 
         Intent intent = getIntent();
         String intentAction = intent.getAction();
