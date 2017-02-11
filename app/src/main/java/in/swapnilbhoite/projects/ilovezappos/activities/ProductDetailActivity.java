@@ -2,8 +2,10 @@ package in.swapnilbhoite.projects.ilovezappos.activities;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
@@ -17,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import in.swapnilbhoite.projects.ilovezappos.Cart;
 import in.swapnilbhoite.projects.ilovezappos.R;
@@ -36,6 +40,8 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     private View cartView;
     private TextView cartItemCount;
     private ImageView thumbnail;
+    private boolean fromDeeplink;
+    private ActivityProductDetailBinding binding;
 
     public static void setProduct(Product product) {
         PRODUCT = product;
@@ -45,6 +51,28 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         networkController = new NetworkControllerImpl();
+
+        Intent intent = getIntent();
+        String intentAction = intent.getAction();
+        if (intentAction != null && intentAction.equals(Intent.ACTION_VIEW)) {
+            Uri data = intent.getData();
+            PRODUCT = new Product()
+                    .withBrandName("")
+                    .withProductName("")
+                    .withOriginalPrice("")
+                    .withPrice("")
+                    .withPercentOff("0%")
+                    .withThumbnailImageUrl("");
+            List<String> pathSegments = data.getPathSegments();
+            PRODUCT.setProductId(pathSegments.get(1));
+            PRODUCT.setColorId(pathSegments.get(3));
+            PRODUCT.setStyleId(data.getQueryParameter("styleId"));
+            networkController.getProductDetails(PRODUCT.getProductId(), this);
+            fromDeeplink = true;
+        } else {
+            fromDeeplink = false;
+        }
+
         setUpContentView();
         setUpToolbar();
         setUpFab();
@@ -61,10 +89,13 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     }
 
     private void setUpContentView() {
-        ActivityProductDetailBinding binding = DataBindingUtil
+        this.binding = DataBindingUtil
                 .setContentView(this, R.layout.activity_product_detail);
         binding.setProduct(PRODUCT);
         binding.executePendingBindings();
+        if (PRODUCT == null) {
+            return;
+        }
         this.thumbnail = (ImageView) findViewById(R.id.image_view_thumb);
         loadThumbnail();
         networkController.getProductDetails(PRODUCT.getProductId(), this);
@@ -130,26 +161,49 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     public void onSuccess(ProductDetail response) {
         if (response != null && response.getProduct() != null && !response.getProduct().isEmpty()) {
             Product product = response.getProduct().get(0);
-            PRODUCT.setBrandId(product.getBrandId());
-            PRODUCT.setDefaultImageUrl(product.getDefaultImageUrl());
-            PRODUCT.setDefaultProductUrl(product.getDefaultProductUrl());
-            PRODUCT.setStyles(product.getStyles());
+            if (fromDeeplink) {
+                product.setColorId(PRODUCT.getColorId());
+                product.setStyleId(PRODUCT.getStyleId());
+                for (Style style : product.getStyles()) {
+                    if (style.getStyleId().equals(product.getStyleId())) {
+                        product.setPrice(style.getPrice());
+                        product.setOriginalPrice(style.getOriginalPrice());
+                        product.setPercentOff(style.getPercentOff());
+                        product.setProductUrl(style.getProductUrl());
+                        break;
+                    }
+                }
+                PRODUCT = product;
+            } else {
+                PRODUCT.setBrandId(product.getBrandId());
+                PRODUCT.setDefaultImageUrl(product.getDefaultImageUrl());
+                PRODUCT.setDefaultProductUrl(product.getDefaultProductUrl());
+                PRODUCT.setStyles(product.getStyles());
+            }
+            ActionBar supportActionBar = getSupportActionBar();
+            if (supportActionBar != null) {
+                supportActionBar.setTitle(PRODUCT.getBrandName());
+            }
+            binding.setProduct(PRODUCT);
+            binding.executePendingBindings();
             loadThumbnail();
         }
     }
 
     private void loadThumbnail() {
+        if (PRODUCT == null) {
+            return;
+        }
         if (PRODUCT.getStyles() != null) {
             for (Style style : PRODUCT.getStyles()) {
                 if (style.getStyleId().equals(PRODUCT.getStyleId())) {
-                    Picasso.with(this).invalidate(PRODUCT.getThumbnailImageUrl());
                     Picasso.with(this)
                             .load(style.getImageUrl())
                             .into(thumbnail);
                     break;
                 }
             }
-        } else {
+        } else if (!PRODUCT.getThumbnailImageUrl().isEmpty()) {
             Picasso.with(this)
                     .load(PRODUCT.getThumbnailImageUrl())
                     .into(thumbnail);

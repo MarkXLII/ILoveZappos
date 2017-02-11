@@ -2,7 +2,6 @@ package in.swapnilbhoite.projects.ilovezappos.network;
 
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -59,7 +58,6 @@ public class NetworkControllerImpl implements NetworkController {
         Call<ProductDetail> productDetails = networkService.getProductDetails(productId,
                 NetworkConstants.AUTH_KEY,
                 "[\"styles\"]");
-        Log.d("SWAP", productDetails.request().toString());
         final WeakReference<NetworkResponse<ProductDetail>> listenerWeakReference =
                 new WeakReference<>(listener);
         productDetails.enqueue(new Callback<ProductDetail>() {
