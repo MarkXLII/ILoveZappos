@@ -1,5 +1,6 @@
 package in.swapnilbhoite.projects.ilovezappos.adapters;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.graphics.Paint;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,7 @@ import in.swapnilbhoite.projects.ilovezappos.Cart;
 import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.databinding.WidgetSearchResultBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
+import in.swapnilbhoite.projects.ilovezappos.models.Style;
 
 public class SearchResultAdapter extends RecyclerView.Adapter {
 
@@ -81,9 +83,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
         }
 
         void bind(final Product product) {
-            Picasso.with(imageViewThumb.getContext())
-                    .load(product.getThumbnailImageUrl())
-                    .into(imageViewThumb);
+            loadThumbnail(product, imageViewThumb, imageViewThumb.getContext());
             binding.setProduct(product);
             binding.executePendingBindings();
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
@@ -123,6 +123,24 @@ public class SearchResultAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+        }
+
+        private void loadThumbnail(Product product, ImageView imageView, Context context) {
+            if (product.getStyles() != null) {
+                for (Style style : product.getStyles()) {
+                    if (style.getStyleId().equals(product.getStyleId())) {
+                        Picasso.with(context).invalidate(product.getThumbnailImageUrl());
+                        Picasso.with(context)
+                                .load(style.getImageUrl())
+                                .into(imageView);
+                        break;
+                    }
+                }
+            } else {
+                Picasso.with(context)
+                        .load(product.getThumbnailImageUrl())
+                        .into(imageView);
+            }
         }
     }
 }

@@ -23,6 +23,7 @@ import in.swapnilbhoite.projects.ilovezappos.R;
 import in.swapnilbhoite.projects.ilovezappos.databinding.ActivityProductDetailBinding;
 import in.swapnilbhoite.projects.ilovezappos.models.Product;
 import in.swapnilbhoite.projects.ilovezappos.models.ProductDetail;
+import in.swapnilbhoite.projects.ilovezappos.models.Style;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkController;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkControllerImpl;
 import in.swapnilbhoite.projects.ilovezappos.network.NetworkResponse;
@@ -34,6 +35,7 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
     private FloatingActionButton fabAddToCart;
     private View cartView;
     private TextView cartItemCount;
+    private ImageView thumbnail;
 
     public static void setProduct(Product product) {
         PRODUCT = product;
@@ -63,10 +65,8 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
                 .setContentView(this, R.layout.activity_product_detail);
         binding.setProduct(PRODUCT);
         binding.executePendingBindings();
-        ImageView thumbnail = (ImageView) findViewById(R.id.image_view_thumb);
-        Picasso.with(this)
-                .load(PRODUCT.getThumbnailImageUrl())
-                .into(thumbnail);
+        this.thumbnail = (ImageView) findViewById(R.id.image_view_thumb);
+        loadThumbnail();
         networkController.getProductDetails(PRODUCT.getProductId(), this);
 
         TextView textViewOriginalPrice = (TextView) binding.getRoot().findViewById(R.id.text_view_original_price);
@@ -133,6 +133,26 @@ public class ProductDetailActivity extends AppCompatActivity implements NetworkR
             PRODUCT.setBrandId(product.getBrandId());
             PRODUCT.setDefaultImageUrl(product.getDefaultImageUrl());
             PRODUCT.setDefaultProductUrl(product.getDefaultProductUrl());
+            PRODUCT.setStyles(product.getStyles());
+            loadThumbnail();
+        }
+    }
+
+    private void loadThumbnail() {
+        if (PRODUCT.getStyles() != null) {
+            for (Style style : PRODUCT.getStyles()) {
+                if (style.getStyleId().equals(PRODUCT.getStyleId())) {
+                    Picasso.with(this).invalidate(PRODUCT.getThumbnailImageUrl());
+                    Picasso.with(this)
+                            .load(style.getImageUrl())
+                            .into(thumbnail);
+                    break;
+                }
+            }
+        } else {
+            Picasso.with(this)
+                    .load(PRODUCT.getThumbnailImageUrl())
+                    .into(thumbnail);
         }
     }
 
